@@ -40,7 +40,6 @@ const Todoform = ({addTodo }) => {
 export default Todoform; */
 
 import { useState } from "react";
-import axios from "axios";
 
 const Todoform = ({ addTodo }) => {
     const [value, setValue] = useState("");
@@ -57,28 +56,30 @@ const Todoform = ({ addTodo }) => {
 
         try {
             // Chamada à API para criar a tarefa
-            const response = await axios.post('http://localhost:44479/api/ToDoList', {
-                text: value,
-                category: category,
-                isCompleted: false
+            const response = await fetch('http://localhost:44479/api/ToDoList', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: value,
+                    category: category,
+                    isCompleted: false
+                })
             });
 
             // Verifica se a resposta é válida
-            if (response.status === 201 || response.status === 200) {
+            if (response.ok) {
+                const data = await response.json();
                 // Adiciona a nova tarefa na lista de tarefas
-                addTodo(response.data.text, response.data.category);
+                addTodo(data.text, data.category);
                 setValue(""); // Limpa o campo de texto
                 setCategory(""); // Limpa o campo de categoria
             } else {
                 console.error("Erro: Status inesperado", response.status);
             }
         } catch (error) {
-            // Verifica se há uma resposta do servidor
-            if (error.response) {
-                console.error("Erro ao criar a tarefa:", error.response.data);
-            } else {
-                console.error("Erro ao criar a tarefa:", error.message);
-            }
+            console.error("Erro ao criar a tarefa:", error.message);
         }
     };
 

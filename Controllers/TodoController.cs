@@ -1,23 +1,22 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using ToDoList.ModelTO;
 using ToDoList.Util;
 
 namespace ToDoList.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/ToDoList")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class TodoController : ControllerBase
     {
         private readonly AppDatabase _context;
 
-        public UsuarioController(AppDatabase context)
+        public TodoController(AppDatabase context)
         {
             _context = context;
         }
 
-      
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Tarefa>>> GetTarefas()
@@ -40,28 +39,27 @@ namespace ToDoList.Controllers
             return Ok(tarefa);
         }
 
-       
+        // Corrigido o nome do método para corresponder à ação de criação
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<Tarefa>> PostTodolist(Tarefa todolist)
+        public async Task<ActionResult<Tarefa>> CreateTarefa(Tarefa tarefa)
         {
-            if (todolist == null)
+            if (tarefa == null)
             {
                 return BadRequest("Tarefa inválida.");
             }
 
-            _context.Tarefa.Add(todolist);
+            _context.Tarefa.Add(tarefa);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTarefa), new { id = todolist.Id }, todolist);
+            return CreatedAtAction(nameof(GetTarefa), new { id = tarefa.Id }, tarefa);
         }
 
-       
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> PutEmployee(int id, Tarefa todolist)
+        public async Task<IActionResult> PutEmployee(int id, Tarefa tarefa)
         {
-            if (id != todolist.Id)
+            if (id != tarefa.Id)
             {
                 return BadRequest("ID da tarefa não corresponde ao ID na URL.");
             }
@@ -73,13 +71,12 @@ namespace ToDoList.Controllers
                 return NotFound();
             }
 
-            _context.Entry(tarefaAntiga).CurrentValues.SetValues(todolist);
+            _context.Entry(tarefaAntiga).CurrentValues.SetValues(tarefa);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-       
         [HttpDelete("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> DeleteTarefa(int id)
@@ -98,4 +95,3 @@ namespace ToDoList.Controllers
         }
     }
 }
-
