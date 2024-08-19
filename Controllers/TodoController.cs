@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Adicionado para uso de métodos async
+using Microsoft.EntityFrameworkCore; 
 using ToDoList.ModelTO;
 using ToDoList.Util;
 
@@ -17,7 +17,7 @@ namespace ToDoList.Controllers
             _context = context;
         }
 
-        // GET: api/Usuario
+      
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Tarefa>>> GetTarefas()
@@ -26,7 +26,6 @@ namespace ToDoList.Controllers
             return Ok(listaUsuarios);
         }
 
-        // GET: api/Usuario/{id}
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<Tarefa>> GetTarefa(int id)
@@ -41,7 +40,7 @@ namespace ToDoList.Controllers
             return Ok(tarefa);
         }
 
-        // POST: api/Usuario
+       
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<Tarefa>> PostTodolist(Tarefa todolist)
@@ -57,7 +56,7 @@ namespace ToDoList.Controllers
             return CreatedAtAction(nameof(GetTarefa), new { id = todolist.Id }, todolist);
         }
 
-        // PUT: api/Usuario/{id}
+       
         [HttpPut("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> PutEmployee(int id, Tarefa todolist)
@@ -80,7 +79,7 @@ namespace ToDoList.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Usuario/{id}
+       
         [HttpDelete("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> DeleteTarefa(int id)

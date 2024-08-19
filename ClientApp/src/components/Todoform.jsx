@@ -48,25 +48,37 @@ const Todoform = ({ addTodo }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!value || !category) return;
+
+        // Verifica se os campos estão preenchidos
+        if (!value || !category) {
+            console.error("Preencha todos os campos!");
+            return;
+        }
 
         try {
             // Chamada à API para criar a tarefa
-            const response = await axios.post("http://localhost:44479/", {
+            const response = await axios.post('http://localhost:44479/api/ToDoList', {
                 text: value,
                 category: category,
                 isCompleted: false
             });
 
-            // Verifique se a resposta é válida
-            if (response.status === 201) {
+            // Verifica se a resposta é válida
+            if (response.status === 201 || response.status === 200) {
                 // Adiciona a nova tarefa na lista de tarefas
                 addTodo(response.data.text, response.data.category);
-                setValue("");
-                setCategory("");
+                setValue(""); // Limpa o campo de texto
+                setCategory(""); // Limpa o campo de categoria
+            } else {
+                console.error("Erro: Status inesperado", response.status);
             }
         } catch (error) {
-            console.error("Erro ao criar a tarefa:", error);
+            // Verifica se há uma resposta do servidor
+            if (error.response) {
+                console.error("Erro ao criar a tarefa:", error.response.data);
+            } else {
+                console.error("Erro ao criar a tarefa:", error.message);
+            }
         }
     };
 
