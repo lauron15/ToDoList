@@ -1,44 +1,4 @@
-﻿/* import { useState } from "react";
-
-const Todoform = ({addTodo }) => {
-    const [value, setValue] = useState("");
-    const [category, setCategory] = useState("");
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!value || !category) return;
-        addTodo(value, category);
-        setValue("");
-        setCategory("");
-    };
-
-    return (
-        <div>
-            <h2>Criar Tarefa</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Digite o título"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                />
-                <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                >
-                    <option value="">Selecione uma categoria</option>
-                    <option value="Trabalho">Trabalho</option>
-                    <option value="Pessoal">Pessoal</option>
-                    <option value="Estudos">Estudos</option>
-                </select>
-                <button type="submit">Criar Tarefa</button>
-            </form>
-        </div>
-    );
-};
-
-export default Todoform; */
-
+﻿
 import { useState } from "react";
 
 const Todoform = ({ addTodo }) => {
@@ -56,12 +16,14 @@ const Todoform = ({ addTodo }) => {
 
         try {
             // Chamada à API para criar a tarefa
-            const response = await fetch('http://localhost:44479/api/ToDoList', {
+            const response = await fetch('api/todo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    tarefas: "",
+                    Nome: "",
                     text: value,
                     category: category,
                     isCompleted: false

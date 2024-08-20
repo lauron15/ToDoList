@@ -6,7 +6,10 @@ using ToDoList.Util;
 
 namespace ToDoList.Controllers
 {
-    [Route("api/ToDoList")]
+    // sempre a route principal vai ser api/[controller] ele entender que o controller é o que está escrito antes dele ex todocontroller vai ser todo
+    // ou seja api/todo
+    //[Route("api/todolist")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TodoController : ControllerBase
     {
@@ -57,7 +60,7 @@ namespace ToDoList.Controllers
 
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> PutEmployee(int id, Tarefa tarefa)
+        public async Task<IActionResult> CreateTarefa(int id, Tarefa tarefa)
         {
             if (id != tarefa.Id)
             {
