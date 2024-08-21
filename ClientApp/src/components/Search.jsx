@@ -13,3 +13,6 @@
 };
 
 export default Search;
+
+
+// ficou mt bom o componente é exatamente isso

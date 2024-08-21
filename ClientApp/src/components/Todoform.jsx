@@ -1,9 +1,10 @@
 ﻿
 import { useState } from "react";
 
-const Todoform = ({ addTodo }) => {
+const Todoform = ({ recarregar }) => {
     const [value, setValue] = useState("");
     const [category, setCategory] = useState("");
+    const [completo, setCompleto] = useState("N");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,11 +23,9 @@ const Todoform = ({ addTodo }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    tarefas: "",
-                    Nome: "",
-                    text: value,
-                    category: category,
-                    isCompleted: false
+                    tarefas: category,
+                    Nome: value,
+                    Completo: completo
                 })
             });
 
@@ -34,7 +33,9 @@ const Todoform = ({ addTodo }) => {
             if (response.ok) {
                 const data = await response.json();
                 // Adiciona a nova tarefa na lista de tarefas
-                addTodo(data.text, data.category);
+                // não precisamos mais disso, ao inves disso vou trocar o nome para "recarregar" 
+                // então quando a respota for "OK" vamos recarregar nossa lista de tarefas no component pai
+                recarregar();
                 setValue(""); // Limpa o campo de texto
                 setCategory(""); // Limpa o campo de categoria
             } else {
@@ -63,6 +64,13 @@ const Todoform = ({ addTodo }) => {
                     <option value="Trabalho">Trabalho</option>
                     <option value="Pessoal">Pessoal</option>
                     <option value="Estudos">Estudos</option>
+                </select>
+                <select
+                    value={completo}
+                    onChange={(e) => setCompleto(e.target.value)}
+                >
+                    <option value="N">Não</option>
+                    <option value="S">Sim</option>
                 </select>
                 <button type="submit">Criar Tarefa</button>
             </form>

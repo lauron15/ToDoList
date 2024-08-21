@@ -9,14 +9,14 @@ const Filter = ({filter, setFilter, setSort }) => {
                     <p>Status:</p>
                     <select value={filter} onChange={(e) => setFilter(e.target.value)}>
                         <option value="All">Todas</option>
-                        <option value="Completed">Completas</option>
-                        <option value="Incomplete">Incompletas</option>
+                        <option value="S">Completas</option>
+                        <option value="N">Incompletas</option>
                     </select>
                 </div>
                 <div>
                     <p>Orderm Alfabética:</p>
-                    <button onClick={() => setSort('Asc')}>Asc</button>
-                    <button onClick={() => setSort('Desc')}>Desc</button>
+                    <button onClick={() => setSort('ASC')}>Asc</button>
+                    <button onClick={() => setSort('DESC')}>Desc</button>
                 </div>
             </div>
         </div>

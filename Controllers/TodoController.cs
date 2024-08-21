@@ -20,11 +20,34 @@ namespace ToDoList.Controllers
             _context = context;
         }
 
-        [HttpGet]
+
+        //Criei uma classe personalizada para usarmos ela de filtro, e ai sim podemos utilizar o body
+        public class Filtros
+        {
+            public string pesquisa { get; set; }
+            public string status { get; set; }
+            public string ordem { get; set; }
+        }
+
+
+
+        [HttpGet("all")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Tarefa>>> GetTarefas()
+        public async Task<ActionResult<IEnumerable<Tarefa>>> GetTarefas([FromQuery]string? pesquisa, [FromQuery] string? status, [FromQuery] string? ordem)
         {
             var listaUsuarios = await _context.Tarefa.ToListAsync();
+
+            if (!String.IsNullOrEmpty(pesquisa))
+                listaUsuarios = listaUsuarios.Where(c => !String.IsNullOrEmpty(c.Nome) && c.Nome.ToUpper().Contains(pesquisa.ToUpper())).ToList();
+
+            if (!String.IsNullOrEmpty(status))
+                listaUsuarios = listaUsuarios.Where(c => c.Completo == status).ToList();
+
+            if (!String.IsNullOrEmpty(ordem)) {
+                if (ordem == "DESC")
+                    return Ok(listaUsuarios.OrderByDescending(c=> c.Id));
+            }
+
             return Ok(listaUsuarios);
         }
 
@@ -42,7 +65,7 @@ namespace ToDoList.Controllers
             return Ok(tarefa);
         }
 
-        // Corrigido o nome do método para corresponder à ação de criação
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<Tarefa>> CreateTarefa(Tarefa tarefa)
@@ -79,6 +102,23 @@ namespace ToDoList.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("completar/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CompletarTarefa(int id)
+        {
+            var _tarefaExistente = _context.Tarefa.Find(id);
+
+            if (_tarefaExistente == null)
+            {
+                return BadRequest("Tarefa não encontrada");
+            }
+
+            _tarefaExistente.Completo = "S";
+            _context.SaveChanges();
+            return Ok();
+        }
+
 
         [HttpDelete("{id}")]
         [AllowAnonymous]
